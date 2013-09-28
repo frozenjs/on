@@ -1,0 +1,32 @@
+{
+  "name": "frozen-on",
+  "version": "0.1.0",
+  "description": "Event emitter sugar for DOM and Node based on dojo/on",
+  "main": "on.js",
+  "dependencies": {
+    "meld": "~1.3.0"
+  },
+  "devDependencies": {
+    "buster": "~0.7.6",
+    "curl": "https://github.com/cujojs/curl/tarball/0.7.3",
+    "buster-amd": "~0.3.1"
+  },
+  "scripts": {
+    "test": "buster-test --browser && buster-test --node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/frozenjs/on"
+  },
+  "keywords": [
+    "on",
+    "emit",
+    "dojo",
+    "eventemitter"
+  ],
+  "author": "Blaine Bublitz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frozenjs/on/issues"
+  }
+}
