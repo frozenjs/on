@@ -47,13 +47,23 @@
           expect(testEl.removeEventListener).toHaveBeenCalledWith('test');
         });
 
-        it('should listen to focus when given focusin on browsers that do not support it', function(){
+        it('should listen to and capture focus when given focusin on browsers that do not support it', function(){
           this.spy(testInput, 'addEventListener');
           on(testInput, 'focusin', noop);
           if(support['event-focusin']){
             expect(testInput.addEventListener).toHaveBeenCalledWith('focusin', noop);
           } else {
             expect(testInput.addEventListener).toHaveBeenCalledWith('focus', noop, true);
+          }
+        });
+
+        it('should listen to and capture blur when given focusout on browsers that do not support it', function(){
+          this.spy(testInput, 'addEventListener');
+          on(testInput, 'focusout', noop);
+          if(support['event-focusin']){
+            expect(testInput.addEventListener).toHaveBeenCalledWith('focusout', noop);
+          } else {
+            expect(testInput.addEventListener).toHaveBeenCalledWith('blur', noop, true);
           }
         });
 
