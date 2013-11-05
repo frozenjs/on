@@ -35,6 +35,23 @@ define(function(require){
 });
 ```
 
+It can use extension events, also.
+
+```js
+define(function(require){
+  var on = require('frozen-on');
+  var tap = require('dojo/gesture/tap');
+
+  var button = document.createElement('button');
+
+  on(button, tap, function(e){
+    // do something with event
+  });
+});
+```
+
+### `on.once`
+
 `on.once` provides a way to listen to an event one time (automatically removes the handler after first call).
 
 ```js
@@ -48,6 +65,8 @@ define(function(require){
   });
 });
 ```
+
+### `on.pausable`
 
 `on.pausable` behaves as a normal `on` call, but the returned object has `pause` and `resume` methods, too.
 
@@ -65,21 +84,6 @@ define(function(require){
     setTimeout(function(){
       pauser.resume();
     }, 1500);
-  });
-});
-```
-
-It can use extension events, also.
-
-```js
-define(function(require){
-  var on = require('frozen-on');
-  var tap = require('dojo/gesture/tap');
-
-  var button = document.createElement('button');
-
-  on(button, tap, function(e){
-    // do something with event
   });
 });
 ```
