@@ -9,8 +9,9 @@
       'mozilla': false, // TODO: implement this
       'dom-addeventlistener': !!(doc && 'addEventListener' in doc),
       'event-orientationchange': !!('ondeviceorientation' in global),
-      'event-stopimmediatepropagation': !!(global.Event && !!global.Event.prototype && !!global.Event.prototype.stopImmediatePropagation),
+      'event-stopimmediatepropagation': !!(global.Event && global.Event.prototype && global.Event.prototype.stopImmediatePropagation),
       'event-focusin': (function(){
+        // TODO: check jquery's impl
         var element = doc && doc.createElement('div');
         return !!(element && element.attachEvent);
       })()
