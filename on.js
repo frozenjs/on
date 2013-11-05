@@ -27,9 +27,9 @@
      *   // which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
      *   obj.onfoo({key:"value"});
      *   // If you use on.emit on a DOM node, it will use native event dispatching when possible.
-     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
-     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
-     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @param {Element|Object} target - This is the target object or DOM element that to receive events from
+     * @param {String|Function} type - This is the name of the event to listen for or an extension event type.
+     * @param {Function} listener - This is the function that should be called when the event fires.
      * @return {Object} An object with a remove() method that can be used to stop listening for this event.
      */
     var on = function(target, type, listener){
@@ -49,9 +49,9 @@
      * returned signal object has pause() and resume() functions. Calling the
      * pause() method will cause the listener to not be called for future events. Calling the
      * resume() method will cause the listener to again be called for future events.
-     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
-     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
-     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @param {Element|Object} target - This is the target object or DOM element that to receive events from
+     * @param {String|Function} type - This is the name of the event to listen for or an extension event type.
+     * @param {Function} listener - This is the function that should be called when the event fires.
      * @return {Object} An object with a remove() method that can be used to stop listening for this event.
      */
     on.pausable =  function(target, type, listener){
@@ -73,9 +73,9 @@
     /**
      * This function acts the same as on(), but will only call the listener once. The
      * listener will be called for the first event that takes place and then listener will automatically be removed.
-     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
-     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
-     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @param {Element|Object} target - This is the target object or DOM element that to receive events from
+     * @param {String|Function} type - This is the name of the event to listen for or an extension event type.
+     * @param {Function} listener - This is the function that should be called when the event fires.
      * @return {Object} An object with a remove() method that can be used to stop listening for this event.
      */
     on.once = function(target, type, listener){
@@ -164,9 +164,9 @@
      *   require(["dojo/on", "dojo/mouse", "dojo/query!css2"], function(on, mouse){
      *     on(node, on.selector(".my-class", mouse.enter), handlerForMyHover);
      *   });
-     * @param  {String|Function} selector  The CSS selector to use for filter events and determine the |this| of the event listener.
-     * @param  {String|Function} eventType The event to listen for
-     * @param  {Boolean} children  Indicates if children elements of the selector should be allowed. This defaults to true
+     * @param {String|Function} selector - The CSS selector to use for filter events and determine the |this| of the event listener.
+     * @param {String|Function} eventType - The event to listen for
+     * @param {Boolean} children - Indicates if children elements of the selector should be allowed. This defaults to true
      * @return {Object} An object with a remove() method that can be used to stop listening for this event.
      */
     on.selector = function(selector, eventType, children){

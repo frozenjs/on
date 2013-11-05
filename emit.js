@@ -27,54 +27,45 @@
     var slice = [].slice;
     var emit;
 
+    /**
+     * Fires an event on the target object.
+     *
+     * Note that this is designed to emit events for listeners registered through
+     * dojo/on. It should actually work with any event listener except those
+     * added through IE's attachEvent (IE8 and below's non-W3C event emitting
+     * doesn't support custom event types). It should work with all events registered
+     * through dojo/on. Also note that the emit method does do any default
+     * action, it only returns a value to indicate if the default action should take
+     * place. For example, emitting a keypress event would not cause a character
+     * to appear in a textbox.
+     * @example
+     *   // To fire our own click event
+     *   on.emit(dojo.byId('button'), 'click', {
+     *     cancelable: true,
+     *     bubbles: true,
+     *     screenX: 33,
+     *     screenY: 44
+     *   });
+     *   // We can also fire our own custom events:
+     *   on.emit(dojo.byId('slider'), 'slide', {
+     *     cancelable: true,
+     *     bubbles: true,
+     *     direction: 'left-to-right'
+     *   });
+     * @param {Element|Object} target - The target object to fire the event on. This can be a DOM element or a plain JS object. If the target is a DOM element, native event emitting mechanisms are used when possible.
+     * @param {String} type - The event type name. You can emulate standard native events like 'click' and 'mouseover' or create custom events like 'open' or 'finish'.
+     * @param {Object} event - An object that provides the properties for the event. See https://developer.mozilla.org/en/DOM/event.initEvent
+     *                       for some of the properties. These properties are copied to the event object.
+     *                       Of particular importance are the cancelable and bubbles properties. The
+     *                       cancelable property indicates whether or not the event has a default action
+     *                       that can be cancelled. The event is cancelled by calling preventDefault() on
+     *                       the event object. The bubbles property indicates whether or not the
+     *                       event will bubble up the DOM tree. If bubbles is true, the event will be called
+     *                       on the target and then each parent successively until the top of the tree
+     *                       is reached or stopPropagation() is called. Both bubbles and cancelable default to false.
+     * @return {Boolean} If the event is cancelable and the event is not cancelled, emit will return true. If the event is cancelable and the event is cancelled, emit will return false.
+     */
     var syntheticDispatch = emit = function(target, type, event){
-      // summary:
-      //    Fires an event on the target object.
-      // target:
-      //    The target object to fire the event on. This can be a DOM element or a plain
-      //    JS object. If the target is a DOM element, native event emitting mechanisms
-      //    are used when possible.
-      // type:
-      //    The event type name. You can emulate standard native events like 'click' and
-      //    'mouseover' or create custom events like 'open' or 'finish'.
-      // event:
-      //    An object that provides the properties for the event. See https://developer.mozilla.org/en/DOM/event.initEvent
-      //    for some of the properties. These properties are copied to the event object.
-      //    Of particular importance are the cancelable and bubbles properties. The
-      //    cancelable property indicates whether or not the event has a default action
-      //    that can be cancelled. The event is cancelled by calling preventDefault() on
-      //    the event object. The bubbles property indicates whether or not the
-      //    event will bubble up the DOM tree. If bubbles is true, the event will be called
-      //    on the target and then each parent successively until the top of the tree
-      //    is reached or stopPropagation() is called. Both bubbles and cancelable
-      //    default to false.
-      // returns:
-      //    If the event is cancelable and the event is not cancelled,
-      //    emit will return true. If the event is cancelable and the event is cancelled,
-      //    emit will return false.
-      // details:
-      //    Note that this is designed to emit events for listeners registered through
-      //    dojo/on. It should actually work with any event listener except those
-      //    added through IE's attachEvent (IE8 and below's non-W3C event emitting
-      //    doesn't support custom event types). It should work with all events registered
-      //    through dojo/on. Also note that the emit method does do any default
-      //    action, it only returns a value to indicate if the default action should take
-      //    place. For example, emitting a keypress event would not cause a character
-      //    to appear in a textbox.
-      // example:
-      //    To fire our own click event
-      //  | on.emit(dojo.byId('button'), 'click', {
-      //  |   cancelable: true,
-      //  |   bubbles: true,
-      //  |   screenX: 33,
-      //  |   screenY: 44
-      //  | });
-      //    We can also fire our own custom events:
-      //  | on.emit(dojo.byId('slider'), 'slide', {
-      //  |   cancelable: true,
-      //  |   bubbles: true,
-      //  |   direction: 'left-to-right'
-      //  | });
       var args = slice.call(arguments, 2);
       var method = 'on' + type;
       if('parentNode' in target){

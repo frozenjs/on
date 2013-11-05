@@ -9,21 +9,24 @@
 
     function noop(){}
 
-    function Evented(){
-      // summary:
-      //    A class that can be used as a mixin or base class,
-      //    to add on() and emit() methods to a class
-      //    for listening for events and emitting events:
-      //
-      //    | define(["dojo/Evented"], function(Evented){
-      //    |   var EventedWidget = dojo.declare([Evented, dijit._Widget], {...});
-      //    |   widget = new EventedWidget();
-      //    |   widget.on("open", function(event){
-      //    |   ... do something with event
-      //    |  });
-      //    |
-      //    | widget.emit("open", {name:"some event", ...});
-    }
+    /**
+     * A class that can be used as a mixin or base class,
+     * to add on() and emit() methods to a class
+     * for listening for events and emitting events:
+     *
+     * @example
+     *   define(["dojo/Evented"], function(Evented){
+     *     var EventedWidget = dojo.declare([Evented, dijit._Widget], {});
+     *     widget = new EventedWidget();
+     *     widget.on("open", function(event){
+     *       // do something with event
+     *     })
+     *   });
+     *
+     *   widget.emit("open", {name:"some event"});
+     */
+    function Evented(){}
+
     Evented.prototype = {
       on: function(type, listener){
         return on.parse(this, type, listener, function(target, type){
@@ -41,6 +44,7 @@
         return emit.apply(on, args);
       }
     };
+
     return Evented;
   });
 
