@@ -4,6 +4,7 @@
   define(function(require){
 
     var support = require('./support');
+    var captures = support['event-focusin'] ? {} : {focusin: "focus", focusout: "blur"};
 
     var on = function(target, type, listener){
       /* jshint eqeqeq: false */
@@ -204,7 +205,6 @@
       };
     };
 
-    var captures = support['event-focusin'] ? {} : {focusin: "focus", focusout: "blur"};
     if(!support['event-stopimmediatepropagation']){
       var stopImmediatePropagation =function(){
         this.immediatelyStopped = true;

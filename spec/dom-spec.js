@@ -4,6 +4,7 @@
   define(function(require){
     var on = require('../on');
     var emit = require('../emit');
+    var support = require('../support');
 
     buster.spec.expose();
 
@@ -18,10 +19,13 @@
 
     describe('DOM Events', function(){
       var testEl;
+      var testInput;
       var noop;
 
       before(function(){
         testEl = document.createElement('div');
+        testInput = document.createElement('input');
+        testInput.setAttribute('type', 'text');
         noop = function noop(){};
       });
 
@@ -41,6 +45,16 @@
           remover.remove();
           expect(testEl.removeEventListener).toHaveBeenCalled();
           expect(testEl.removeEventListener).toHaveBeenCalledWith('test');
+        });
+
+        it('should listen to focus when given focusin on browsers that do not support it', function(){
+          this.spy(testInput, 'addEventListener');
+          on(testInput, 'focusin', noop);
+          if(support['event-focusin']){
+            expect(testInput.addEventListener).toHaveBeenCalledWith('focusin', noop);
+          } else {
+            expect(testInput.addEventListener).toHaveBeenCalledWith('focus', noop, true);
+          }
         });
 
       });

@@ -10,11 +10,7 @@
       'dom-addeventlistener': !!(doc && 'addEventListener' in doc),
       'event-orientationchange': !!('ondeviceorientation' in global),
       'event-stopimmediatepropagation': !!(global.Event && global.Event.prototype && global.Event.prototype.stopImmediatePropagation),
-      'event-focusin': (function(){
-        // TODO: check jquery's impl
-        var element = doc && doc.createElement('div');
-        return !!(element && element.attachEvent);
-      })()
+      'event-focusin': 'onfocusin' in global // https://github.com/jquery/jquery/blob/bbbdd947256a3fcd788fb9d4f306046082a1ef1f/src/event/support.js
     };
 
     return support;
