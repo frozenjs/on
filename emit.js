@@ -30,6 +30,7 @@
     /**
      * Fires an event on the target object.
      *
+     *
      * Note that this is designed to emit events for listeners registered through
      * dojo/on. It should actually work with any event listener except those
      * added through IE's attachEvent (IE8 and below's non-W3C event emitting
@@ -40,14 +41,15 @@
      * to appear in a textbox.
      * @example
      *   // To fire our own click event
-     *   on.emit(dojo.byId('button'), 'click', {
+     *   // If you use emit on a DOM node, it will use native event dispatching when possible.
+     *   emit(dojo.byId('button'), 'click', {
      *     cancelable: true,
      *     bubbles: true,
      *     screenX: 33,
      *     screenY: 44
      *   });
      *   // We can also fire our own custom events:
-     *   on.emit(dojo.byId('slider'), 'slide', {
+     *   emit(dojo.byId('slider'), 'slide', {
      *     cancelable: true,
      *     bubbles: true,
      *     direction: 'left-to-right'

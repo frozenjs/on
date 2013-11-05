@@ -19,14 +19,13 @@
      *   var obj = new Evented();
      *   on(obj, "foo", fooHandler);
      *   // And then we could publish a "foo" event:
-     *   on.emit(obj, "foo", {key: "value"});
+     *   emit(obj, "foo", {key: "value"});
+     *   // which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
+     *   obj.onfoo({key:"value"});
      *   // We can use extension events as well. For example, you could listen for a tap gesture:
      *   define(["dojo/on", "dojo/gesture/tap", function(on, tap){
      *     on(button, tap, tapHandler);
      *   });
-     *   // which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
-     *   obj.onfoo({key:"value"});
-     *   // If you use on.emit on a DOM node, it will use native event dispatching when possible.
      * @param {Element|Object} target - This is the target object or DOM element that to receive events from
      * @param {String|Function} type - This is the name of the event to listen for or an extension event type.
      * @param {Function} listener - This is the function that should be called when the event fires.
