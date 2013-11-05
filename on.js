@@ -6,40 +6,34 @@
     var support = require('./support');
     var captures = support['event-focusin'] ? {} : {focusin: "focus", focusout: "blur"};
 
+    /**
+     * A function that provides core event listening functionality. With this function
+     * you can provide a target, event type, and listener to be notified of
+     * future matching events that are fired.
+     * @example
+     *   // To listen for "click" events on a button node, we can do:
+     *   define(["dojo/on"], function(on){
+     *     on(button, "click", clickHandler);
+     *   });
+     *   // Evented JavaScript objects can also have their own events.
+     *   var obj = new Evented();
+     *   on(obj, "foo", fooHandler);
+     *   // And then we could publish a "foo" event:
+     *   on.emit(obj, "foo", {key: "value"});
+     *   // We can use extension events as well. For example, you could listen for a tap gesture:
+     *   define(["dojo/on", "dojo/gesture/tap", function(on, tap){
+     *     on(button, tap, tapHandler);
+     *   });
+     *   // which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
+     *   obj.onfoo({key:"value"});
+     *   // If you use on.emit on a DOM node, it will use native event dispatching when possible.
+     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
+     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
+     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @return {Object} An object with a remove() method that can be used to stop listening for this event.
+     */
     var on = function(target, type, listener){
       /* jshint eqeqeq: false */
-
-      // summary:
-      //    A function that provides core event listening functionality. With this function
-      //    you can provide a target, event type, and listener to be notified of
-      //    future matching events that are fired.
-      // target: Element|Object
-      //    This is the target object or DOM element that to receive events from
-      // type: String|Function
-      //    This is the name of the event to listen for or an extension event type.
-      // listener: Function
-      //    This is the function that should be called when the event fires.
-      // returns: Object
-      //    An object with a remove() method that can be used to stop listening for this
-      //    event.
-      // description:
-      //    To listen for "click" events on a button node, we can do:
-      //    | define(["dojo/on"], function(listen){
-      //    |   on(button, "click", clickHandler);
-      //    |   ...
-      //    Evented JavaScript objects can also have their own events.
-      //    | var obj = new Evented;
-      //    | on(obj, "foo", fooHandler);
-      //    And then we could publish a "foo" event:
-      //    | on.emit(obj, "foo", {key: "value"});
-      //    We can use extension events as well. For example, you could listen for a tap gesture:
-      //    | define(["dojo/on", "dojo/gesture/tap", function(listen, tap){
-      //    |   on(button, tap, tapHandler);
-      //    |   ...
-      //    which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
-      //    | obj.onfoo({key:"value"});
-      //    If you use on.emit on a DOM node, it will use native event dispatching when possible.
-
       if(typeof target.on == "function" && typeof type != "function" && !target.nodeType){
         // delegate to the target's on() method, so it can handle it's own listening if it wants (unless it
         // is DOM node and we may be dealing with jQuery or Prototype's incompatible addition to the
@@ -49,12 +43,18 @@
       // delegate to main listener code
       return on.parse(target, type, listener, addListener, this);
     };
+
+    /**
+     * This function acts the same as on(), but with pausable functionality. The
+     * returned signal object has pause() and resume() functions. Calling the
+     * pause() method will cause the listener to not be called for future events. Calling the
+     * resume() method will cause the listener to again be called for future events.
+     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
+     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
+     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @return {Object} An object with a remove() method that can be used to stop listening for this event.
+     */
     on.pausable =  function(target, type, listener){
-      // summary:
-      //    This function acts the same as on(), but with pausable functionality. The
-      //    returned signal object has pause() and resume() functions. Calling the
-      //    pause() method will cause the listener to not be called for future events. Calling the
-      //    resume() method will cause the listener to again be called for future events.
       var paused;
       var signal = on(target, type, function(){
         if(!paused){
@@ -69,11 +69,16 @@
       };
       return signal;
     };
+
+    /**
+     * This function acts the same as on(), but will only call the listener once. The
+     * listener will be called for the first event that takes place and then listener will automatically be removed.
+     * @param  {Element|Object} target This is the target object or DOM element that to receive events from
+     * @param  {String|Function} type This is the name of the event to listen for or an extension event type.
+     * @param  {Function} listener This is the function that should be called when the event fires.
+     * @return {Object} An object with a remove() method that can be used to stop listening for this event.
+     */
     on.once = function(target, type, listener){
-      // summary:
-      //    This function acts the same as on(), but will only call the listener once. The
-      //    listener will be called for the first
-      //    event that takes place and then listener will automatically be removed.
       var signal = on(target, type, function(){
         // remove this listener
         signal.remove();
@@ -149,23 +154,22 @@
       };
     }
 
+    /**
+     * Creates a new extension event with event delegation. This is based on
+     * the provided event type (can be extension event) that
+     * only calls the listener when the CSS selector matches the target of the event.
+     *
+     * The application must require() an appropriate level of dojo/query to handle the selector.
+     * @example
+     *   require(["dojo/on", "dojo/mouse", "dojo/query!css2"], function(on, mouse){
+     *     on(node, on.selector(".my-class", mouse.enter), handlerForMyHover);
+     *   });
+     * @param  {String|Function} selector  The CSS selector to use for filter events and determine the |this| of the event listener.
+     * @param  {String|Function} eventType The event to listen for
+     * @param  {Boolean} children  Indicates if children elements of the selector should be allowed. This defaults to true
+     * @return {Object} An object with a remove() method that can be used to stop listening for this event.
+     */
     on.selector = function(selector, eventType, children){
-      // summary:
-      //    Creates a new extension event with event delegation. This is based on
-      //    the provided event type (can be extension event) that
-      //    only calls the listener when the CSS selector matches the target of the event.
-      //
-      //    The application must require() an appropriate level of dojo/query to handle the selector.
-      // selector:
-      //    The CSS selector to use for filter events and determine the |this| of the event listener.
-      // eventType:
-      //    The event to listen for
-      // children:
-      //    Indicates if children elements of the selector should be allowed. This defaults to
-      //    true
-      // example:
-      // |  require(["dojo/on", "dojo/mouse", "dojo/query!css2"], function(listen, mouse){
-      // |    on(node, on.selector(".my-class", mouse.enter), handlerForMyHover);
       return function(target, listener){
         // if the selector is function, use it to select the node, otherwise use the matches method
         var matchesTarget = typeof selector == "function" ? {matches: selector} : this,
