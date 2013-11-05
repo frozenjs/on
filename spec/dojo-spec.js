@@ -4,6 +4,7 @@
   define(function(require){
     var on = require('../on');
     var emit = require('../emit');
+    var Evented = require('../Evented');
 
     buster.spec.expose();
 
@@ -11,66 +12,24 @@
     var assert = buster.assert;
     var refute = buster.refute;
 
-    var evt = new CustomEvent('test', {
-      bubbles: true,
-      cancelable: true
-    });
-
-    describe('DOM Events', function(){
-      var testEl;
-      var noop;
-
-      before(function(){
-        testEl = document.createElement('div');
-        noop = function noop(){};
-      });
-
-      describe('On', function(){
-
-        it('should register a handler for custom event on a DOM element', function(){
-          this.spy(testEl, 'addEventListener');
-          on(testEl, 'test', noop);
-          expect(testEl.addEventListener).toHaveBeenCalled();
-        });
-
-        it('should return a remover function that detaches handler on evocation', function(){
-          this.spy(testEl, 'removeEventListener');
-          var remover = on(testEl, 'test', noop);
-          expect(remover).toBeDefined();
-          expect(remover.remove).toBeFunction();
-          remover.remove();
-          expect(testEl.removeEventListener).toHaveBeenCalled();
-          expect(testEl.removeEventListener).toHaveBeenCalledWith('test');
-        });
-
-      });
-
-      describe('Emit', function(){
-
-        it('should emit a custom event on a DOM element', function(){
-          this.spy(testEl, 'dispatchEvent');
-          on(testEl, 'test', function(e){
-            expect(e).toHavePrototype(CustomEvent.prototype);
-            expect(e.type).toBe(evt.type);
-          });
-          on(testEl, 'test', function(e){
-            expect(e).toHavePrototype(CustomEvent.prototype);
-            expect(e.type).toBe(evt.type);
-          });
-          emit(testEl, 'test', evt);
-          expect(testEl.dispatchEvent).toHaveBeenCalled();
-        });
-
-      });
-    });
-
     describe('Dojo Tests', function(){
       var query;
 
-      it('should pass the Dojo dom tests', function(){
-        var div = document.body.appendChild(document.createElement("div"));
-        var span = div.appendChild(document.createElement("span"));
+      var div;
+      var span;
+      var button;
 
+      before(function(){
+        div = document.body.appendChild(document.createElement("div"));
+        span = div.appendChild(document.createElement("span"));
+        button = div.appendChild(document.createElement("button"));
+      });
+
+      after(function(){
+        document.body.removeChild(div);
+      });
+
+      it('should pass the Dojo dom tests', function(){
         var order = [];
         var signal = on(div,"custom", function(event){
           order.push(event.detail.a);
@@ -213,8 +172,6 @@
       });
 
       it('should pass the Dojo extension event tests', function(){
-        var div = document.body.appendChild(document.createElement("div"));
-        var span = div.appendChild(document.createElement("span"));
         span.setAttribute("foo", 2);
         var order = [];
         var customEvent = function(target, listener){
@@ -251,7 +208,6 @@
       });
 
       it('should pass the Dojo stop immediate propagation tests', function(){
-        var button = document.body.appendChild(document.createElement("button"));
         on(button, "click", function(event){
           event.stopImmediatePropagation();
         });
@@ -264,8 +220,6 @@
       });
 
       it('should pass the Dojo event augmentation tests', function(){
-        var div = document.body.appendChild(document.createElement("div"));
-        var button = div.appendChild(document.createElement("button"));
         on(button, "click", function(event){
           event.modified = true;
           event.test = 3;
@@ -276,6 +230,61 @@
         });
         button.click();
         assert.equals(testValue, 3);
+      });
+
+      it('should pass the Dojo object tests', function(){
+        var order = [];
+        var obj = new Evented();
+        obj.oncustom = function(event){
+          order.push(event.a);
+          return event.a+1;
+        };
+        var signal = on.pausable(obj, "custom", function(event){
+          order.push(0);
+          return event.a+1;
+        });
+        obj.oncustom({a:0});
+        var signal2 = on(obj, "custom, foo", function(event){
+          order.push(event.a);
+        });
+        emit(obj, "custom", {
+          a: 3
+        });
+        signal.pause();
+        var signal3 = on(obj, "custom", function(a){
+          order.push(3);
+        }, true);
+        emit(obj, "custom", {
+          a: 3
+        });
+        signal2.remove();
+        signal.resume();
+        emit(obj, "custom", {
+          a: 6
+        });
+        signal3.remove();
+        var signal4 = on(obj, "foo, custom", function(a){
+          order.push(4);
+        }, true);
+        signal.remove();
+        emit(obj, "custom", {
+          a: 7
+        });
+        expect(order).toEqual([0,0,3,0,3,3,3,3,6,0,3,7,4]);
+      });
+
+      it('should pass the Dojo once tests', function(){
+        var order = [];
+        var obj = new Evented();
+        obj.on("custom", function(event){
+          order.push(event.a);
+        });
+        var signal = on.once(obj, "custom", function(event){
+          order.push(1);
+        });
+        obj.emit("custom",{a:0});
+        obj.oncustom({a:2}); // should call original method, but not listener
+        expect(order).toEqual([0,1,2]);
       });
 
     });

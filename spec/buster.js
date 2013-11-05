@@ -1,21 +1,21 @@
 var config = exports;
 
-config['Base'] = {
+config.base = {
   rootPath: '../',
   tests: [
-    'spec/on.js',
-    'spec/emit.js',
-    'spec/Evented.js'
+    'spec/on-spec.js',
+    'spec/emit-spec.js',
+    'spec/Evented-spec.js'
   ]
 };
 
-config['Node'] = {
-  extends: 'Base',
+config.node = {
+  extends: 'base',
   environment: 'node'
 };
 
-config['Browser'] = {
-  extends: 'Base',
+config.browser = {
+  extends: 'base',
   environment: 'browser',
   extensions: [require('buster-amd')],
   libs: [
@@ -27,6 +27,7 @@ config['Browser'] = {
     'node_modules/meld/**/*.js'
   ],
   tests: [
-    'spec/dom.js'
+    'spec/dojo-spec.js',
+    'spec/dom-spec.js'
   ]
 };

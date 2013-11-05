@@ -11,12 +11,14 @@
   "trailing": true,
   "loopfunc": true,
   "browser": true,
+  "node": true,
   "devel": true,
   "globals": {
     "expect": true,
     "describe": true,
     "it": true,
     "before": true,
-    "after": true
+    "after": true,
+    "curl": true
   }
 }
