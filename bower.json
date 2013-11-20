@@ -1,0 +1,27 @@
+{
+  "name": "frozen-on",
+  "version": "0.2.0",
+  "homepage": "https://github.com/frozenjs/on",
+  "authors": [
+    "Blaine Bublitz <blaine@iceddev.com>"
+  ],
+  "description": "Event emitter sugar for DOM and Node based on dojo/on",
+  "main": "main.js",
+  "keywords": [
+    "on",
+    "emit",
+    "dojo",
+    "eventemitter"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "meld": "~1.3.0"
+  }
+}
