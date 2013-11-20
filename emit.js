@@ -5,17 +5,6 @@
 
     var support = require('./support');
 
-    var CustomEvent = CustomEvent || function(event, params){
-      params = params || {
-        bubbles: false,
-        cancelable: false,
-        detail: undefined
-      };
-      var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-      return evt;
-    };
-
     function syntheticPreventDefault(){
       this.cancelable = false;
       this.defaultPrevented = true;
@@ -100,7 +89,14 @@
           // that would be a lot of extra code, with little benefit that I can see, seems
           // best to use the generic constructor and copy properties over, making it
           // easy to have events look like the ones created with specific initializers
-          var nativeEvent = new CustomEvent(type, event);
+          var nativeEvent = target.ownerDocument.createEvent('HTMLEvents');
+          nativeEvent.initEvent(type, !!event.bubbles, !!event.cancelable);
+          // and copy all our properties over
+          for(var i in event){
+            if(!(i in nativeEvent)){
+              nativeEvent[i] = event[i];
+            }
+          }
           return target.dispatchEvent(nativeEvent) && nativeEvent;
         }
         return syntheticDispatch.apply(emit, arguments); // emit for a non-node
