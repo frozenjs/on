@@ -17,8 +17,8 @@ define(function(require){
   var emit = require('../emit');
   var support = require('../support');
 
-  // var evt = document.createEvent('CustomEvent');
-  // evt.initCustomEvent('test', true, true, {});
+  var evt = document.createEvent('HTMLEvents');
+  evt.initEvent('test', true, true, {});
 
   describe('DOM Events', function(){
     var testEl;
@@ -77,19 +77,19 @@ define(function(require){
       it('should emit a custom event on a DOM element', function(){
         var defer = this.async(1000, 2);
 
-        // var spy = sinon.spy(testEl, 'dispatchEvent');
+        var spy = sinon.spy(testEl, 'dispatchEvent');
         on(testEl, 'test', function(e){
-          // expect(e).to.be.an.instanceof(evt.constructor); // CustomEvent
-          // expect(e.type).to.equal(evt.type);
+          expect(e).to.be.an.instanceof(evt.constructor); // HTMLEvents
+          expect(e.type).to.equal(evt.type);
           defer.resolve();
         });
         on(testEl, 'test', function(e){
-          // expect(e).to.be.an.instanceof(evt.constructor); // CustomEvent
-          // expect(e.type).to.equal(evt.type);
+          expect(e).to.be.an.instanceof(evt.constructor); // HTMLEvents
+          expect(e.type).to.equal(evt.type);
           defer.resolve();
         });
-        emit(testEl, 'test', {});
-        // expect(spy).to.have.been.called;
+        emit(testEl, 'test', evt);
+        expect(spy).to.have.been.called;
 
         return defer;
       });
