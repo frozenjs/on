@@ -1,4 +1,8 @@
 language: node_js
 node_js:
-  - "0.8"
-  - "0.10"
+  - '0.8'
+  - '0.10'
+env:
+  global:
+    - SAUCE_USERNAME="iceddev"
+    - secure: "Vo+UNK1gOAEQ991oMot3okbQ1HwNNWyPCMYDEYbI6NDDhrMbutSDlCt32xUIiJAiAp6NcozJDKq7GY4dq+VNWUFdUOk2iJDtLv4qHhSi5xzc/3wtPHeVjP58xOrzBEXhLMEbbQOnIUJRDlcilIOuC44RVM7CN5zA5X0raTFDGkg="

@@ -7,14 +7,12 @@
     "meld": "~1.3.0"
   },
   "devDependencies": {
-    "buster": "0.7.7",
-    "curl": "https://github.com/cujojs/curl/tarball/0.7.3",
-    "buster-amd": "~0.3.1",
-    "open": "0.0.4"
+    "intern": "https://github.com/theintern/intern/archive/master.tar.gz",
+    "sinon-chai": "~2.4.0",
+    "sinon": "~1.7.3"
   },
   "scripts": {
-    "browsers": "node spec/browsers.js",
-    "test": "buster-test --node"
+    "test": "intern-client config=specs/config && intern-runner config=specs/config"
   },
   "repository": {
     "type": "git",

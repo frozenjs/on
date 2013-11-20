@@ -14,11 +14,11 @@
   "node": true,
   "devel": true,
   "globals": {
+    "define": true,
     "expect": true,
     "describe": true,
     "it": true,
     "before": true,
     "after": true,
-    "curl": true
   }
 }
