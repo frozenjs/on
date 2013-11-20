@@ -107,7 +107,7 @@ define(function(require){
 });
 ```
 
-### Evented
+### `Evented`
 
 A Class that exposes `on` and `emit` methods on the object.
 
