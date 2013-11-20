@@ -8,7 +8,7 @@ define(function(require){
   var registerSuite = require('intern!object');
   var assert = require('intern/chai!assert');
 
-  var on = require('../on');
+  var on = require('../main');
   var emit = require('../emit');
   var Evented = require('../Evented');
   var support = require('../support');

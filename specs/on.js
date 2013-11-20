@@ -6,7 +6,7 @@ define(function(require){
   var describe = bdd.describe;
   var it = bdd.it;
 
-  var on = require('../on');
+  var on = require('../main');
   var emit = require('../emit');
 
   var Evented = require('../Evented');

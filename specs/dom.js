@@ -13,7 +13,7 @@ define(function(require){
   var it = bdd.it;
   var beforeEach = bdd.beforeEach;
 
-  var on = require('../on');
+  var on = require('../main');
   var emit = require('../emit');
   var support = require('../support');
 

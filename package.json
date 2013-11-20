@@ -2,7 +2,7 @@
   "name": "frozen-on",
   "version": "0.1.0",
   "description": "Event emitter sugar for DOM and Node based on dojo/on",
-  "main": "on.js",
+  "main": "main.js",
   "dependencies": {
     "meld": "~1.3.0"
   },

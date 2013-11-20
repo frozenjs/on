@@ -3,7 +3,7 @@
 
   define(function(require){
 
-    var on = require('./on');
+    var on = require('./main');
     var emit = require('./emit');
     var meld = require('meld');
 
